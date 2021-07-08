@@ -1,5 +1,7 @@
 FROM ubuntu:xenial
 
+LABEL org.opencontainers.image.source https://github.com/phartenfeller/ttt-docker
+
 RUN apt-get update && \
   apt-get install -y wget lib32gcc1 lib32tinfo5 unzip nginx lib32stdc++6 lib32z1 lib32z1-dev ca-certificates
 
@@ -12,40 +14,16 @@ RUN wget -O /tmp/steamcmd_linux.tar.gz http://media.steampowered.com/installer/s
   tar -xvzf /tmp/steamcmd_linux.tar.gz && \
   rm /tmp/steamcmd_linux.tar.gz
 
+# Install GMOD
 RUN ./steamcmd.sh +login anonymous +force_install_dir ./gmod-base +app_update 4020 validate +quit
+
+# Install Counter Strike Source (for some assets)
 RUN ./steamcmd.sh +login anonymous +force_install_dir ./cstrike-base +app_update 232330 validate +quit
 
-
-# ----------------
-# Annoying lib fix
-# --------------
-
-
-#RUN mkdir /gmod-libs
-#WORKDIR /gmod-libs
-#RUN wget http://launchpadlibrarian.net/195509222/libc6_2.15-0ubuntu10.10_i386.deb
-#RUN dpkg -x libc6_2.15-0ubuntu10.10_i386.deb .
-#RUN cp -a lib/i386-linux-gnu/. /gmod-base/bin/
-#WORKDIR /
-#RUN rm -rf /gmod-libs
-#RUN cp /steamcmd/linux32/libstdc++.so.6 /gmod-base/bin/
-
-#RUN mkdir -p /home/steam/.steam/sdk32/
-#RUN cp -a /steamcmd/linux32/. /home/steam/.steam/sdk32/
-
-# ----------------------
-# Setup Volume and Union
-# ----------------------
-#
-#RUN mkdir /gmod-volume
-#VOLUME /gmod-volume
-#RUN chown -R steam /gmod-volume /gmod-base /steamcmd /home/steam /cstrike-base
-
-# ---------------
-# Setup Container
-# ---------------
-
 ADD ./start-server.sh start-server.sh
+
+# Add cstrike mount file
+ADD ./static/mount.cfg /home/steam/gmod-base/garrysmod/cfg/mount.cfg
 
 USER root
 RUN chmod +x ./start-server.sh && chown steam ./start-server.sh
