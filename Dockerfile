@@ -17,6 +17,9 @@ RUN wget -O /tmp/steamcmd_linux.tar.gz http://media.steampowered.com/installer/s
 # Install GMOD
 RUN ./steamcmd.sh +login anonymous +force_install_dir ./gmod-base +app_update 4020 validate +quit
 
+# Verify (sometimes something is missing...)
+RUN ./steamcmd.sh +login anonymous +force_install_dir ./gmod-base +app_update 4020 validate +quit
+
 # Install Counter Strike Source (for some assets)
 RUN ./steamcmd.sh +login anonymous +force_install_dir ./cstrike-base +app_update 232330 validate +quit
 
