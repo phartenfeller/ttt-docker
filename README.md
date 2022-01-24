@@ -5,7 +5,6 @@ docker run -d -t \
   -p 27015:27015 -p 27015:27015/udp -p 27005:27005 -p 27005:27005/udp \
   --name gmod-ttt \
   --env-file path/to/your/ttt.env \
-  -v path/to/your/folder:/home/steam/gmod-base/garrysmod
   ghcr.io/phartenfeller/trouble-in-ttown:latest
 ```
 
