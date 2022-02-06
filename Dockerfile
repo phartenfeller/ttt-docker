@@ -48,4 +48,6 @@ ENV HOST_WORKSHOP_COLLECTION = ""
 
 RUN ln -s /home/steam/linux32/ /home/steam/.steam/sdk32
 
+VOLUME /home/steam/gmod-base/garrysmod
+
 CMD ./start-server.sh
